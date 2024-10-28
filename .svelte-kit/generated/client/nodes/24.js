@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/PartnerManagement/PowerballCommisionRate/+page.svelte";
