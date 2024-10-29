@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/RefundManagement/+page.svelte";
+export { default as component } from "../../../../src/routes/PublicBetting/SlotSettings/+page.svelte";

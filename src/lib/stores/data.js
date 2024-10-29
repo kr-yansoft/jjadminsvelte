@@ -197,7 +197,27 @@ const data = [
         "postbalance":"670,155",
         "accumulationtime":"2024-10-28 07:15:49",
         "refundrequestcategory":"회원 환전",
-        "refundrequestamount":"50,000"
+        "refundrequestamount":"50,000",
+        "permission":"관리자",
+        "id":"aaa",
+        "password":"1234",
+        "ipallow":"",
+        "useunuse":"",
+        "createddate":"2024-06-2619:24:43",
+        "sitemap":"구찌",
+        "domain":"https://sa.guc-222.com:8082/api/bet",
+        "apiid":"jjcasino",
+        "apikey":"codDVmxYQYP8:zu6w-HJYC",
+        "ratio":"100%",
+        "activestatus":"",
+        "round":"3-20240928023500088-281",
+        "targetsite":"슬롯뱅크",
+        "bettingamount":"3000",
+        "winningamount":"1685",
+        "bettingfee":"120",
+        "processingtime":"2024-09-12 02:35:00",
+        "detailedlog":""
+        
     },
     {
         "toplevel":"test2",
@@ -379,7 +399,27 @@ const data = [
         "postbalance":"670,155",
         "accumulationtime":"2024-10-28 07:15:49",
         "refundrequestcategory":"회원 환전",
-        "refundrequestamount":"50,000"
+        "refundrequestamount":"50,000",
+        "permission":"관리자",
+        "id":"aaa",
+        "password":"1234",
+        "ipallow":"",
+        "useunuse":"",
+        "createddate":"2024-06-2619:24:43",
+        "sitemap":"구찌",
+        "domain":"https://sa.guc-222.com:8082/api/bet",
+        "apiid":"jjcasino",
+        "apikey":"codDVmxYQYP8:zu6w-HJYC",
+        "ratio":"100%",
+        "activestatus":"",
+        "round":"3-20240928023500088-281",
+        "targetsite":"슬롯뱅크",
+        "bettingamount":"3000",
+        "winningamount":"1685",
+        "bettingfee":"120",
+        "processingtime":"2024-09-12 02:35:00",
+        "detailedlog":""
+        
     }
     // More entries
 ];

@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/Settings/NotificationSettings/+page.svelte";
+export { default as component } from "../../../../src/routes/Settings/InsuranceSettings/+page.svelte";

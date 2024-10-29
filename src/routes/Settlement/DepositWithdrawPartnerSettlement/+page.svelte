@@ -24,7 +24,7 @@ const tableColumns = [
 {#if $dataStore.tableData.length > 0}
 <DataTable 
 tableData={$dataStore.tableData}
-{tableColumns} title="카지노/슬롯 파트너 정산"/>
+{tableColumns} title="입출금 파트너 정산"/>
 {:else}
  <p>Loading data...</p>
 {/if}

@@ -1224,7 +1224,9 @@ function setupDateRangeButtons(instance) {
                     {#if tableData?.length > 0}
                         {#each tableData as row}
                             <tr>
+                                
                                 {#each tableColumns as column}
+                                
                                     <td >
                                         {row[column.field] ?? ''}
                                     </td>

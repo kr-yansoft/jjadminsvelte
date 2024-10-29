@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/MemberManagement/MemberCommisionHistory/+page.svelte";
+export { default as component } from "../../../../src/routes/MemberManagement/MemberBalanceHistory/+page.svelte";

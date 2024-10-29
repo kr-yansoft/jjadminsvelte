@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/Settings/CasinoInsurance/+page.svelte";
+export { default as component } from "../../../../src/routes/Settings/Banner/+page.svelte";

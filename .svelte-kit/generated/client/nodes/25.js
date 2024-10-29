@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/PartnerManagement/PowerballPayoutSettings/+page.svelte";
+export { default as component } from "../../../../src/routes/PartnerManagement/PowerballCommissionRate/+page.svelte";

@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/PartnerManagement/CasinoSlotCommisionRate/+page.svelte";
+export { default as component } from "../../../../src/routes/Messages/+page.svelte";

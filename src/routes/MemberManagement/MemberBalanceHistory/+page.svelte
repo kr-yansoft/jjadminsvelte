@@ -24,7 +24,7 @@
 {#if $dataStore.tableData.length > 0}
 <DataTable
 tableData={$dataStore.tableData}
-{tableColumns} showDatePicker={true} {filterField} showButtons={true} title="충전 관리"/>
+{tableColumns} showDatePicker={true} {filterField} showButtons={true} title="회원 잔고내역"/>
 {:else}
         <p>Loading data...</p>
     {/if}

@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/Settings/PowerballInsuranceHistory/+page.svelte";
+export { default as component } from "../../../../src/routes/Settings/PowerballBettingLimit/+page.svelte";

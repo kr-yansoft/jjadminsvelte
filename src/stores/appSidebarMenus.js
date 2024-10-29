@@ -25,7 +25,7 @@ const menus = [{
 { url: '/MemberManagement', icon: 'fa fa-user', title: '회원 관리 ',
 	children: [
 		{ url: '/MemberManagement/MemberList', title: '회원목록'},
-		{ url: '/MemberManagement/CreateMemeber', title: '회원 생선' },
+		{ url: '/MemberManagement/CreateMember', title: '회원 생선' },
 		{ url: '/MemberManagement/MemberBalanceHistory', title: '회원 잔고내역' },
 		{ url: '/MemberManagement/MemberCommissionHistory', title: '회원 수수료내역' },
 	]
@@ -33,8 +33,8 @@ const menus = [{
 { url: '/PartnerManagement', icon: 'fa fa-handshake', title: '파트너 관리 ',
 	children: [
 		{ url: '/PartnerManagement/PartnerList', title: '파트너 목록',},
-		{ url: '/PartnerManagement/CreatePartner', title: '파트너 생선' },
-		{ url: '/PartnerManagement/CasinoSlotCommisionRate', title: '카지노/슬롯 수수료율' },
+		{ url: '/PartnerManagement/CreatePartner', title: '파트너 생성' },
+		{ url: '/PartnerManagement/CasinoSlotCommissionRate', title: '카지노/슬롯 수수료율' },
 		{ url: '/PartnerManagement/PowerballCommissionRate', title: '파워볼 수수료율' },
 		{ url: '/PartnerManagement/PowerballPayoutSettings', title: '파워볼 배당설정' },
 	]
@@ -49,7 +49,7 @@ const menus = [{
 },
 { url: '/AccessManagement', icon: 'fa fa-clock', title: '접속 관리',
 	children: [
-		{ url: '/AccessManagement/AccessedManagement', title: '접속 회원',},
+		{ url: '/AccessManagement/AccessedMembers', title: '접속 회원',},
 		{ url: '/AccessManagement/AccessMemberLog', title: '접속 회원 로그' },
 		{ url: '/AccessManagement/IPRestrictions', title: '접속 아이피 제한' },
 		{ url: '/AccessManagement/AccessAdmin', title: '접속 관리자' },
@@ -63,7 +63,8 @@ const menus = [{
 		{ url: '/PublicBetting/PublicBettingHistory', title: '공배팅 내역' }
 	]
 },
-{ url: '/Message', icon: 'fa fa-message', title: '쪽지'},
+{ url: '/Board', icon: 'fa fa-inbox', title: '게시판'},
+{ url: '/Messages', icon: 'fa fa-message', title: '쪽지'},
 { url: '/Settings', icon: 'fa fa-gear', title: '설정',
 	children: [
 		{ url: '/Settings/Site', title: '사이트',},
@@ -71,7 +72,7 @@ const menus = [{
 		{ url: '/Settings/GameProvider', title: '게임사 ON/OFF' },
 		{ url: '/Settings/AdminAccount', title: '관리자 계정' },
 		{ url: '/Settings/NotificationSettings', title: '알림 설정' },
-		{ url: '/Settings/CasinoInsuranceSettings', title: '카지노 보험설정' },
+		{ url: '/Settings/CasinoInsurance', title: '카지노 보험설정' },
 		{ url: '/Settings/CasinoSlotInsuranceHistory', title: '카지노/슬롯 보험내역' },
 		{ url: '/Settings/Powerball', title: '파워볼' },
 		{ url: '/Settings/PowerballPayout', title: '파워볼 배당' },
