@@ -1,0 +1,36 @@
+[
+    {
+        "toplevel":"119test",
+        "directorsuperior":"119test",
+        "member":"119test1 (119test1)",
+        "requestcategory":"회원 충전",
+        "accountholder":"예금주",
+        "requestamount":"100,000",
+        "resultamount":"700,000",
+        "requestdatetime":"2024-10-09 17:34:24",
+        "handlerproccesor":"test0100",
+        "processingdatetime":"2024-10-09 17:34:30",
+        "status":"처리",
+        "memonotes":"메모",
+        "bonustype":"",
+        "bonusrecharge":"0",
+        "functionfeatures":""
+    },
+    {
+        "toplevel":"test100",
+        "directorsuperior":"test100",
+        "member":"test100 (test100)",
+        "requestcategory":"회원 충전",
+        "accountholder":"예금주",
+        "requestamount":"50,000",
+        "resultamount":"917,697",
+        "requestdatetime":"2024-10-09 17:34:24",
+        "handlerproccesor":"test0100",
+        "processingdatetime":"2024-10-09 17:34:30",
+        "status":"처리",
+        "memonotes":"메모",
+        "bonustype":"",
+        "bonusrecharge":"0",
+        "functionfeatures":""
+    }
+]

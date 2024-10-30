@@ -1,9 +1,9 @@
 <script>
         import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
-    
+    let fileName = 'CasinoSlotMemberSettlement';
 
     const tableColumns = [
         { field:'member', label: '회원'},
@@ -23,14 +23,12 @@
         { field:'calculator', label: '계산기', button:'one-button'},
             ]
             let filterField = "status";
-    onMount(() => {
-        fetchAndSetData();
-    });  
+            onMount(() => {
+        fetchAndSetDataForPage(fileName);
+    });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable 
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} title="카지노/슬롯 회원 정산"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

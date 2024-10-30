@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
-    
+    let fileName = 'MemberBalanceHistory';
 
     const tableColumns = [
         { field:'member', label: '회원'},
@@ -18,13 +18,11 @@
     ]
     let filterField = "status";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} showButtons={true} title="회원 잔고내역"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

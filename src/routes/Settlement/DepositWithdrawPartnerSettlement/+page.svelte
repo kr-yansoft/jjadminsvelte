@@ -1,13 +1,15 @@
 <script>
+    import Barcode from '../../../components/common/barcode.svelte';
+    import ToggleTable from '../../../components/common/ToggleTable.svelte';
     import { onMount } from 'svelte';
-import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
 import { dataStore } from '../../../lib/stores/dataStore';
 import DataTable from "../../../components/common/DataTable.svelte";
-
+let fileName = 'DepositWithdrawPartnerSettlement';
 const tableColumns = [
  { field:'headheadquarters', label: '왕본사'},
- { field:'mainheadquarters', label: '대본사'},
- { field:'subheadquarters', label: '부본사'},
+ { field:'mainheadquarters', label: '대본사',},
+ { field:'subheadquarters', label: '부본사', },
  { field:'distributor', label: '총판'},
  { field:'store', label: '매장'},
  { field:'user', label: '유저'},
@@ -18,13 +20,23 @@ const tableColumns = [
  { field:'totaldepositswithdrawals', label: '토탈 입출금'},
      ]
      onMount(() => {
- fetchAndSetData();
-}); 
+        fetchAndSetDataForPage(fileName);
+    });
+    $: tableData = $dataStore.tableData;
+ function toggleRow(index) {
+        // Reactively update the row's expanded state
+        tableData = tableData.map((row, i) =>
+            i === index ? { ...row, expanded: !row.expanded } : row
+        );
+    }
 </script>
-{#if $dataStore.tableData.length > 0}
+<!-- <div class="panel p-4">
+    <ToggleTable {tableData}
+    {tableColumns} />
+</div> -->
+
 <DataTable 
-tableData={$dataStore.tableData}
-{tableColumns} title="입출금 파트너 정산"/>
-{:else}
- <p>Loading data...</p>
-{/if}
+{tableData}
+{tableColumns}
+on:row-toggle={event => toggleRow(event.detail.index)}
+ title="입출금 파트너 정산"/>

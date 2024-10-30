@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
 import { dataStore } from '../../../lib/stores/dataStore';
 import DataTable from "../../../components/common/DataTable.svelte";
-
+let fileName = 'PowerballMemberSettlement';
 const tableColumns = [
  { field:'toplevel', label: '최상위'},
  { field:'directsuperior', label: '직상위'},
@@ -20,13 +20,11 @@ const tableColumns = [
  { field:'detailedhistory', label: '상세내역', type:'button'},
      ]
      onMount(() => {
- fetchAndSetData();
-}); 
+        fetchAndSetDataForPage(fileName);
+    });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable 
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} title="파워볼 회원정산"/>
-{:else}
- <p>Loading data...</p>
-{/if}

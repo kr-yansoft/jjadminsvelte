@@ -1,0 +1,32 @@
+[
+    {
+        "toplevel":"maniatest",
+        "directsuperior":"maniatest",
+        "member":"maniatest(마니아테스트)",
+        "bettinghistory":"보기",
+        "ctr":"보기",
+        "balanceheldamount":"9,707,055",
+        "donutpoints":"0",
+        "commission":"73,184",
+        "totalrecharge":"10,200,000",
+        "totalwithdrawal":"0",
+        "profit":"419,761",
+        "membermanagement":"관리",
+        "detailedhistory":"상세"
+    },
+    {
+        "toplevel":"zz11",
+        "directsuperior":"zz11",
+        "member":"gggg01(지지01)",
+        "bettinghistory":"보기",
+        "ctr":"보기",
+        "balanceheldamount":"6,225,600",
+        "donutpoints":"0",
+        "commission":"0",
+        "totalrecharge":"0",
+        "totalwithdrawal":"500,000",
+        "profit":"-6,725,600",
+        "membermanagement":"관리",
+        "detailedhistory":"상세"
+    }
+]

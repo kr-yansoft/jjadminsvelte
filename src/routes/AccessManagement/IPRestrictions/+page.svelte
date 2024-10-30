@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
     
-
+    let fileName = 'IPRestrictions';
     const tableColumns = [
         { field:'ip', label: '아이피'},
         { field:'memo', label: '메모',type:'input'},
@@ -15,13 +15,11 @@
     ]
     let filterField = "status";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} showButtons={true} title="접속 아이피 제한"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

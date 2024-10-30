@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
     
-
+    let fileName = 'AccessedMembers';
     const tableColumns = [
         { field:'toplevel', label: '최상위'},
         { field:'directorsuperior', label: '직상위'},
@@ -28,13 +28,11 @@
     ]
     let filterField = "status";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} showButtons={true} title="접속 회원"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

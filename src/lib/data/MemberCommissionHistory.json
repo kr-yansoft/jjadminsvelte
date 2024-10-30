@@ -1,0 +1,24 @@
+[
+    {
+        "member":"test3 (test3)",
+        "type":"당첨",
+        "bettingid":"test3 (test3)",
+        "game":"Bet with Stream is assigned",
+        "session":"eb2dd68e-86fb-5c0a-8d2c-c5fc64d91492",
+        "prevpoint":"244,927",
+        "point":"5",
+        "postpoint":"244,932",
+        "accumulationtime":"2024-10-28 20:36:58"
+    },
+    {
+        "member":"test3 (test3)",
+        "type":"배팅",
+        "bettingid":"test3 (test3)",
+        "game":"Bet with Stream is assigned",
+        "session":"eb2dd68e-86fb-5c0a-8d2c-c5fc64d91492",
+        "prevpoint":"244,927",
+        "point":"5",
+        "postpoint":"244,932",
+        "accumulationtime":"2024-10-28 20:36:58"
+    }
+]

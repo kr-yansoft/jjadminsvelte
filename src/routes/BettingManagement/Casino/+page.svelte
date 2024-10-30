@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
     
-
+    let fileName = 'Casino';
     const tableColumns = [
         { field:'id', label: '아이디/닉네임'},
         { field:'type', label: '종류'},
@@ -19,18 +19,16 @@
         { field:'bettingdatetime', label: '배팅일시'},
         { field:'processingdatetime', label: '처리일시'},
         { field:'detailes', label: '상세'},
-        { field:'result', label: '결과'},
+        { field:'resultbutton', label: '결과'},
         
     ]
     let filterField = "status";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} showButtons={true} title="카지노"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

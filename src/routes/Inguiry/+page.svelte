@@ -1,6 +1,9 @@
 <script>
+            import { onMount } from 'svelte';
+    import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
+    import { dataStore } from '../../lib/stores/dataStore';
     import DataTable from "../../components/common/DataTable.svelte";
-    
+    let fileName = 'Inquiry';
 
     const tableColumns = [
         { field:'toplevel', label: '최상위'},
@@ -13,5 +16,10 @@
         { field:'functionfeatures', label: '기능', type:'two-buttons'},
     ]
     let filterField = 'status'
+    onMount(() => {
+        fetchAndSetDataForPage(fileName);
+    });
+    $: tableData = $dataStore.tableData;
+
 </script>
-<DataTable {tableColumns} showDatePicker={true} {filterField} showNoticeButtons={true} title="1:1 문의"/>
+<DataTable {tableColumns} {tableData} showDatePicker={true} {filterField} showNoticeButtons={true} title="1:1 문의"/>

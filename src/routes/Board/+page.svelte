@@ -1,22 +1,27 @@
 <script>
     import DataTable from "../../components/common/DataTable.svelte";
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
+    let fileName = 'Board';
+    // import { fetchAndSetData } from '../../lib/stores/dataHelpers';
     import { dataStore } from '../../lib/stores/dataStore';
+  
+
+    onMount(() => {
+        fetchAndSetDataForPage(fileName);
+    });
     const tableColumns = [
         { field:'title', label: '제목'},
-        { field:'noticeapprove', label: '팝업 여부'},
-        { field:'regcreatedate', label: '작성일'},
+        { field:'popupapprove', label: '팝업 여부'},
+        { field:'creationdate', label: '작성일'},
         { field:'edit', label: '수정', type:'button'},
-        { field:'delete', label: '삭제', type:'button'},
+        { field:'delete', label: '삭제', type:'button',buttonLabel:'get'},
     ]
-    onMount(() => {
-        fetchAndSetData();
-    });
+    $: tableData = $dataStore.tableData;
+    // onMount(() => {
+    //     fetchAndSetData();
+    // });
 </script>
-{#if $dataStore.tableData.length > 0}
 
-<DataTable  {tableColumns} tableData={$dataStore.tableData} title="게시판"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}
+
+<DataTable  {tableColumns} {tableData} title="게시판"/>

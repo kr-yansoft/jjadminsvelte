@@ -1,0 +1,34 @@
+[
+    {
+        "toplevel":"test100",
+        "directorsuperior":"test100",
+        "member":"test100 (test100)",
+        "requestcategory":"회원 환전",
+        "depositinformation":"예금주/은행명/11111111",
+        "refundrequestamount":"50,000",
+        "credit":"0",
+        "resultamount":"867,697",
+        "requestdatetime":"2024-10-09 17:00:37",
+        "handlerproccesor":"test0100",
+        "processingdatetime":"2024-10-09 17:34:30",
+        "status":"처리",
+        "memonotes":"메모",
+        "functionfeatures":""
+    },
+    {
+        "toplevel":"test3",
+        "directorsuperior":"test3",
+        "member":"test3 (test3)",
+        "requestcategory":"회원 환전",
+        "depositinformation":"테스트3/테스트3/3333",
+        "refundrequestamount":"50,000",
+        "credit":"0",
+        "resultamount":"1,017,036",
+        "requestdatetime":"2024-10-09 03:18:44",
+        "handlerproccesor":"Master",
+        "processingdatetime":"2024-10-09 03:18:52",
+        "status":"삭제",
+        "memonotes":"메모",
+        "functionfeatures":""
+    }
+]

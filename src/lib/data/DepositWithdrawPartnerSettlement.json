@@ -1,0 +1,37 @@
+[
+    {
+        "headheadquarters": "119test(119test)",
+        "mainheadquarters": [
+            {
+                "mainheadquarters1": "11",
+                "subheadquarters": [
+                    { "subheadquarters": "A", "distributor":"123" },
+                    { "subheadquarters": "B" },
+                    { "subheadquarters": "C" }
+                ]
+            }
+        ],
+        "subheadquarters":"",
+        "distributor": "예금주/은행명/11111111",
+        "store": "50,000",
+        "user": "0",
+        "7levels": "867,697",
+        "admindepositswithdrawals": "2024-10-09 17:00:37",
+        "personaldepositswithdrawals": "test0100",
+        "subordinatedepositswithdrawals": "2024-10-09 17:34:30",
+        "totaldepositswithdrawals": "처리"
+    },
+    {
+       "headheadquarters":"test100",
+        "mainheadquarters":"test100",
+        "subheadquarters":"test100 (test100)",
+        "distributor":"예금주/은행명/11111111",
+        "store":"50,000",
+        "user":"0",
+        "7levels":"867,697",
+        "admindepositswithdrawals":"2024-10-09 17:00:37",
+        "personaldepositswithdrawals":"test0100",
+        "subordinatedepositswithdrawals":"2024-10-09 17:34:30",
+        "totaldepositswithdrawals":"처리"
+    }
+]

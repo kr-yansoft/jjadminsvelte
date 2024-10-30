@@ -16,6 +16,8 @@
     import { t } from '../../i18n/i18n';
     import { locale } from 'svelte-i18n';
     import { get } from 'svelte/store';
+    import jQuery from 'jquery'; // Import jQuery
+
     import { setPageTitle } from '$lib/utils';
 
 
@@ -54,7 +56,10 @@
     let selectedFilters = []; 
     let isDropdownOpen = false; 
     let isDropdownOpen2 = false; 
-  
+
+
+
+
     $: filteredData = tableData.filter(row =>
          selectedFilters.length === 0 || selectedFilters.includes(row[filterField])
      );
@@ -156,10 +161,25 @@
             },
             dom: 't',
             createdRow: (row, rowData) => {
+                console.log('Row Data:', rowData); 
                 const cells = row.querySelectorAll('td');
                 cells.forEach((cell, index) => {
                     const column = tableColumns[index];
                     if (column) {
+                       const children = Object.values(rowData).find(value => Array.isArray(value) && value.length > 0);
+
+            if (children) {
+                const button = createExpandButton(row, rowData, children);
+                cell.appendChild(button); // Append button only if children exist
+            } else {
+                // Render text content normally for other fields
+                cell.textContent = rowData[column.field] || '';
+            }
+                //        if (column && column.type === 'button-row') {
+                //     const button = createExpandButton(row, rowData);
+                //     cell.appendChild(button);
+                // } 
+            
                             const getFlagImageSrc = (code) =>
                             `https://flagcdn.com/w40/${code}.png`;
 
@@ -383,6 +403,7 @@
 
                             cell.appendChild(buttonElement);
                         }
+                       
                          if (applyRedColor && index > 0 && !isNaN(rowData[column.field])) {
                          cell.innerHTML = formatAmount(cell.innerHTML);
                          cell.style.textAlign = 'right';
@@ -859,7 +880,83 @@
             }
         });
     }
- 
+    async function handleRowExpansion(parentRow, children) {
+    console.log('Expanding child rows:', children);
+
+    if (!Array.isArray(children) || children.length === 0) {
+        console.log('No valid children to expand.');
+        return;
+    }
+
+    await tick(); // Ensure the DOM is stable
+
+    const tableBody = parentRow.closest('tbody');
+    if (!tableBody) {
+        console.error('Table body not found. Cannot insert child rows.');
+        return;
+    }
+
+    children.forEach((childData) => {
+        const newRow = document.createElement('tr');
+        newRow.classList.add('child-row'); // Optional styling
+
+        // Populate the new row with child data
+        tableColumns.forEach((column) => {
+            const newCell = document.createElement('td');
+            newCell.textContent = childData[column.field] || '';
+
+            // Add an expand button if the child also has children
+            if (childData.mainheadquarters || childData.subheadquarters) {
+                const button = createExpandButton(newRow, childData);
+                newCell.appendChild(button);
+            }
+
+            newRow.appendChild(newCell);
+        });
+
+        // Insert the new row directly after the parent row
+        tableBody.insertBefore(newRow, parentRow.nextSibling);
+    });
+}
+
+function createExpandButton(row, rowData) {
+    // Combine mainheadquarters and subheadquarters as possible children
+    const children = [...(rowData.mainheadquarters || []), ...(rowData.subheadquarters || [])];
+
+    const button = document.createElement('button');
+    button.textContent = `하부 (${children.length}) ▲`;
+
+    let expanded = false;
+
+    button.onclick = async () => {
+        expanded = !expanded;
+        button.textContent = `하부 (${children.length}) ${expanded ? '▼' : '▲'}`;
+
+        if (expanded) {
+            await handleRowExpansion(row, children);
+        } else {
+            collapseChildRows(row);
+        }
+    };
+
+    return button;
+}
+
+
+function collapseChildRows(parentRow) {
+    let nextRow = parentRow.nextSibling;
+    while (nextRow && nextRow.classList.contains('child-row')) {
+        const tempRow = nextRow;
+        nextRow = nextRow.nextSibling;
+        tempRow.remove(); // Remove the child row
+    }
+}
+
+
+
+
+
+
  // WORKING!!! setting current Page
     function setCurrentPage(page) {
          if (page >= 1 && page <= Math.ceil(totalRecords / itemsPerPage)) {
@@ -1212,7 +1309,7 @@ function setupDateRangeButtons(instance) {
                  <!-- Post Notice Part goes here -->
              </slot>
              
-             <table bind:this={dataTableElement}  tableData={$dataStore.tableData2} class="table mt-3 table-hover table-bordered align-middle text-nowrap">
+             <table bind:this={dataTableElement}  tableData={$dataStore.tableData2} class="table mt-3 table-hover table-bordered align-middle text-nowrap" id="dataTable">
                 <thead>
                      <tr>
                          {#each tableColumns as col}
@@ -1305,6 +1402,9 @@ function setupDateRangeButtons(instance) {
  </div>
  {/if}
  <style scoped>
+    .child-row{
+        padding: 0;
+    }
     .scrollable-panel{
         overflow-x: auto;
     }

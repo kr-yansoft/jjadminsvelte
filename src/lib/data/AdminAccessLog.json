@@ -1,0 +1,22 @@
+[
+    {
+        "attemptedid":"maniatest",
+        "attemptedpassword":"1234",
+        "permission":"관리자",
+        "ip":"221.148.136.102",
+        "accessdomain":"jj-0077.com",
+        "browser":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "logintime":"2024-10-30 14:59:37",
+        "result":"성공"
+    },
+    {
+        "attemptedid":"maniatest",
+        "attemptedpassword":"1234",
+        "permission":"관리자",
+        "ip":"221.148.136.102",
+        "accessdomain":"jj-0077.com",
+        "browser":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "logintime":"2024-10-30 14:59:37",
+        "result":"실패"
+    }
+]

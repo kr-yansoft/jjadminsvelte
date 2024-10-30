@@ -1,0 +1,45 @@
+[
+    {
+        "toplevel":"마니아테스트",
+        "directorsuperior":"마니아테스트",
+        "member":"maniatest(마니아테스트)",
+        "balanceheldamount":"9,707,055",
+        "donutpoints":"0",
+        "commission":"73,184",
+        "totalrecharge":"10,200,000",
+        "totalwithdrawal":"0",
+        "profit":"419,761",
+        "credit":"0",
+        "accountholder":"예금주",
+        "message":"쪽지",
+        "status":"",
+        "loginaccess":"",
+        "loginfailure":"미접속",
+        "registrationdate":"2024-07-23",
+        "lastlogin":"2024-10-12",
+        "edit":"수정", 
+        "delete":"삭제"
+    },
+    {
+        "toplevel":"테왕",
+        "directorsuperior":"테매",
+        "member":"gggg01(지지01)",
+        "balanceheldamount":"6,225,600",
+        "donutpoints":"0",
+        "commission":"0",
+        "totalrecharge":"0",
+        "totalwithdrawal":"500,000",
+        "profit":"-6,725,600",
+        "credit":"0",
+        "accountholder":"길",
+        "message":"쪽지",
+        "status":"",
+        "loginaccess":"",
+        "loginfailure":"미접속",
+        "registrationdate":"2024-07-23",
+        "lastlogin":"2024-10-12",
+        "edit":"수정", 
+        "delete":"삭제"
+    }
+
+]

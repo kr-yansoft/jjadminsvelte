@@ -1,0 +1,35 @@
+[
+    {
+        "id":"test3 (test3)",
+        "type":"카지노",
+        "gameprovider":"에볼루션",
+        "gamename":"Bet with Stream is assigned",
+        "bettingamount":"400",
+        "winningamount":"0",
+        "commission":"5",
+        "losing":"237",
+        "moneyafterbet":"668,875",
+        "result":"낙첨",
+        "bettingdatetime":"2024-10-28 20:36:48",
+        "processingdatetime":"2024-10-28 20:37:02",
+        "detailes":"상세",
+        "resultbutton":"결과"
+    },
+    {
+        "id":"test3 (test3)",
+        "type":"카지노",
+        "gameprovider":"에볼루션",
+        "gamename":"Bet with Stream is assigned",
+        "bettingamount":"400",
+        "winningamount":"0",
+        "commission":"5",
+        "losing":"237",
+        "moneyafterbet":"668,875",
+        "result":"당첨",
+        "bettingdatetime":"2024-10-28 20:36:48",
+        "processingdatetime":"2024-10-28 20:37:02",
+        "detailes":"상세",
+        "resultbutton":"결과"
+    }
+    
+]

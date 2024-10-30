@@ -1,0 +1,36 @@
+[
+    {
+        "member":"aa111(aa111)",
+        "casinobettingamount":"50,000",
+        "casinowinningamount":"48,750",
+        "casinocommission":"600",
+        "casinobetswins":"2 / 1",
+        "casinosettlement":"650",
+        "slotbettingamount":"26,795,800",
+        "slotwinningamount":"20,857,608",
+        "slotcommission":"1,205,494",
+        "slotbetswins":"3,615 / 830",
+        "slotsettlement":"4,732,698",
+        "totalbetswins":"3,617 / 831",
+        "totalsettlement":"4,733,348",
+        "details":"상세",
+        "calculator":"계산기"
+    },
+    {
+        "member":"gggg01(지지01)",
+        "casinobettingamount":"11,005,000",
+        "casinowinningamount":"10,015,000",
+        "casinocommission":"0",
+        "casinobetswins":"5 / 3",
+        "casinosettlement":"990,000",
+        "slotbettingamount":"8,713,800",
+        "slotwinningamount":"6,075,465",
+        "slotcommission":"0",
+        "slotbetswins":"1,805 / 456",
+        "slotsettlement":"2,638,335",
+        "totalbetswins":"3,617 / 831",
+        "totalsettlement":"4,733,348",
+        "details":"상세",
+        "calculator":"계산기"
+    }
+]

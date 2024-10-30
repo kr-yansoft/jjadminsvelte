@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
-    
+    let fileName = 'SlotSettings';
 
     const tableColumns = [
         { field:'viewall', label: '전체보기'},
@@ -25,13 +25,11 @@
     ]
     let filterField = "status";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} showButtons={true} title="슬롯 설정"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

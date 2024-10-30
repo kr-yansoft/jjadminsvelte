@@ -1,0 +1,42 @@
+[
+    {
+        "toplevel":"test3",
+        "directorsuperior":"test3",
+        "member":"test3(test3)",
+        "heldamount":"668,850",
+        "donutalarm":"0",
+        "commission":"244,940",
+        "totalrecharge":"1,190,000",
+        "totalwithdrawal":"120,000",
+        "profit":"156,210",
+        "credit":"0",
+        "accounthelder":"테스트3",
+        "message":"쪽지",
+        "status":"정상",
+        "connection":"접속",
+        "loginfailure":"0 reset",
+        "registrationdate":"2024-02-26",
+        "lastlogin":"2024-10-25",
+        "edit":"수정"
+    },
+    {
+        "toplevel":"마니아테스트",
+        "directorsuperior":"마니아테스트",
+        "member":"test3(maniatest(마니아테스트))",
+        "heldamount":"668,850",
+        "donutalarm":"0",
+        "commission":"244,940",
+        "totalrecharge":"1,190,000",
+        "totalwithdrawal":"120,000",
+        "profit":"156,210",
+        "credit":"0",
+        "accounthelder":"테스트3",
+        "message":"쪽지",
+        "status":"정상",
+        "connection":"접속",
+        "loginfailure":"0 reset",
+        "registrationdate":"2024-02-26",
+        "lastlogin":"2024-10-25",
+        "edit":"수정"
+    }
+]

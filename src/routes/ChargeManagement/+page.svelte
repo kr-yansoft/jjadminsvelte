@@ -1,10 +1,10 @@
 <script>
     import DailyOverview from '../../components/common/DailyOverview.svelte';
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
     import { dataStore } from '../../lib/stores/dataStore';
     import DataTable from "../../components/common/DataTable.svelte";
-    
+    let fileName = 'ChargeManagement';
 
     const tableColumns = [
         { field:'toplevel', label: '최상위'},
@@ -26,14 +26,12 @@
     let filterField = "status";
     let filterField2 = "requestcategory";
     onMount(() => {
-        fetchAndSetData();
+        fetchAndSetDataForPage(fileName);
     });
+    $: tableData = $dataStore.tableData;
 </script>
 
-{#if $dataStore.tableData.length > 0}
+
 <DataTable
-tableData={$dataStore.tableData}
+{tableData}
 {tableColumns} showDatePicker={true} {filterField} {filterField2} showButtons={true} title="충전 관리"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}

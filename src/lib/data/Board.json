@@ -1,0 +1,38 @@
+[
+    {
+        "title":"★게임 이용시 준수사항★",
+        "popupapprove":"팝업",
+        "creationdate":"2024-01-03 14:25:35",
+        "edit":"수정",
+        "delete":"삭제"
+    },
+    {
+        "title":"★게임 이용시 주의사항★",
+        "popupapprove":"일반",
+        "creationdate":"2024-01-03 14:25:35",
+        "edit":"수정",
+        "delete":"삭제"
+    },
+    {
+        "title":"★이용규정 안내(필독)★",
+        "popupapprove":"일반",
+        "creationdate":"2024-01-03 14:25:35",
+        "edit":"수정",
+        "delete":"삭제"
+    },
+    {
+        "title":"★신규회원 승인안내★",
+        "popupapprove":"팝업",
+        "creationdate":"2024-01-03 14:25:35",
+        "edit":"수정",
+        "delete":"삭제"
+    },
+    {
+        "title":"★배팅한도안내★",
+        "popupapprove":"팝업",
+        "creationdate":"2024-01-03 14:25:35",
+        "edit":"수정",
+        "delete":"삭제"
+    }
+   
+]

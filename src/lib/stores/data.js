@@ -1,20 +1,4 @@
-function generateNumberRange(firstValue, start = 1, end = 100, step = 1, appendPercentage = false) {
-    let range = [];
-    
-    // Ensure the first value is always included as the first element.
-    range.push(firstValue.toString()); 
 
-    // Generate the rest of the range from `start` to `end`.
-    for (let i = start; i <= end; i += step) {
-        let value = i.toFixed(step < 1 ? 1 : 0); // Format numbers correctly.
-        if (appendPercentage) {
-            value += '%';
-        }
-        range.push(value);
-    }
-
-    return range;
-}
 
 const data = [
     {
@@ -421,6 +405,5 @@ const data = [
         "detailedlog":""
         
     }
-    // More entries
 ];
 export default data;

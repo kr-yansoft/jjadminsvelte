@@ -1,0 +1,22 @@
+[
+    {
+        "member":"test3 (test3)",
+        "type":"당첨",
+        "game":"Sugar Rush 1000",
+        "session":"80857903646034",
+        "prevbalance":"668,875",
+        "balance":"150",
+        "postbalance":"669,025",
+        "accumulationtime":"2024-10-28 21:29:37"
+    },
+    {
+        "member":"test3 (test3)",
+        "type":"배팅",
+        "game":"Bet with Stream is assigned",
+        "session":"eb2dd68e-86fb-5c0a-8d2c-c5fc64d91492",
+        "prevbalance":"668,875",
+        "balance":"-400",
+        "postbalance":"669,025",
+        "accumulationtime":"2024-10-28 21:29:37"
+    }
+]

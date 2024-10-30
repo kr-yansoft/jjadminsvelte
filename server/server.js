@@ -1,44 +1,50 @@
 import express from 'express';
-import cors from 'cors'; 
-import data from '../src/lib/stores/data.js';
-import data2 from '../src/lib/stores/data2.js'; 
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const PORT = 5000;
 
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use(cors());
+app.use(cors()); // Enable CORS
 
+// Helper function to read data from JSON files
+function getDataFromFile(fileName) {
+    const filePath = path.resolve(__dirname, `../src/lib/data/${fileName}.json`);
+    try {
+        console.log(`Reading data from: ${filePath}`);
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        return data;
+    } catch (error) {
+        console.error(`Error reading file ${fileName}:`, error);
+        return null;
+    }
+}
 
-app.get('/api/data', (req, res) => {
-    const page = parseInt(req.query.page, 10) || 1;  
-    const size = parseInt(req.query.size, 10) || 10;
-
-    const totalRecords = data.length;  
-    const startIndex = (page - 1) * size;  
-    const endIndex = startIndex + size;    
-    const paginatedData = data.slice(startIndex, endIndex);  
-
-    
-    res.json({
-        totalRecords,
-        data: paginatedData
-    });
-});
-
-
-app.get('/api/data2', (req, res) => {
+// API route for paginated data
+app.get('/api/data/:fileName', (req, res) => {
+    const { fileName } = req.params;
     const page = parseInt(req.query.page, 10) || 1;
     const size = parseInt(req.query.size, 10) || 10;
 
-    const totalRecords = data2.length;  
+    const data = getDataFromFile(fileName);
+
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to load data from file.' });
+    }
+
+    const totalRecords = data.length;
     const startIndex = (page - 1) * size;
-    const endIndex = startIndex + size;
-    const paginatedData = data2.slice(startIndex, endIndex);
+    const paginatedData = data.slice(startIndex, startIndex + size);
 
     res.json({
         totalRecords,
-        data2: paginatedData 
+        data: paginatedData
     });
 });
 

@@ -1,0 +1,22 @@
+[
+    {
+        "kingheadquarters":"",
+        "mainheadquarters":"",
+        "brancheadquarters":"",
+        "distributor":"",
+        "store":"",
+        "user":"",
+        "levels":"",
+        "phonenumber":"",
+        "accountholder":"",
+        "status":"",
+        "heldmoney":"",
+        "commission":"",
+        "partnerheldmoney":"",
+        "partnercommission":"",
+        "totalrecharge":"",
+        "totalwithdrawal":"",
+        "subordinate":"",
+        "settings":""
+    }
+]
