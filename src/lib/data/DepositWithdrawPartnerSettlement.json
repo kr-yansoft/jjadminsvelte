@@ -1,37 +1,66 @@
 [
     {
-        "headheadquarters": "119test(119test)",
+        "headheadquarters": "119test <br>(119test)",
         "mainheadquarters": [
             {
-                "mainheadquarters1": "11",
+                "headheadquarters":"",
+                "mainheadquarters": "119test1 (119test1)",
                 "subheadquarters": [
-                    { "subheadquarters": "A", "distributor":"123" },
-                    { "subheadquarters": "B" },
-                    { "subheadquarters": "C" }
-                ]
+                    { "subheadquarters": "119test01(1191)"},
+                    { "subheadquarters": "119test02(1192)" },
+                    { "subheadquarters": "119test03(1193)" },
+                    { "subheadquarters": "119test04(1194)" }
+                ],
+                "distributor": "",
+                "store": "",
+                "user": "",
+                "7levels": "",
+                "admindepositswithdrawals": "",
+                "personaldepositswithdrawals": "",
+                "subordinatedepositswithdrawals": "",
+                "totaldepositswithdrawals": ""
             }
         ],
         "subheadquarters":"",
-        "distributor": "예금주/은행명/11111111",
-        "store": "50,000",
-        "user": "0",
-        "7levels": "867,697",
+        "distributor": "",
+        "store": "",
+        "user": "",
+        "7levels": "",
         "admindepositswithdrawals": "2024-10-09 17:00:37",
         "personaldepositswithdrawals": "test0100",
         "subordinatedepositswithdrawals": "2024-10-09 17:34:30",
         "totaldepositswithdrawals": "처리"
     },
     {
-       "headheadquarters":"test100",
-        "mainheadquarters":"test100",
-        "subheadquarters":"test100 (test100)",
-        "distributor":"예금주/은행명/11111111",
-        "store":"50,000",
-        "user":"0",
-        "7levels":"867,697",
-        "admindepositswithdrawals":"2024-10-09 17:00:37",
-        "personaldepositswithdrawals":"test0100",
-        "subordinatedepositswithdrawals":"2024-10-09 17:34:30",
-        "totaldepositswithdrawals":"처리"
+        "headheadquarters": "119test(119test)",
+        "mainheadquarters": [
+            {
+                "headheadquarters":"",
+                "mainheadquarters": "119test1 (119test1)",
+                "subheadquarters": [
+                    { "subheadquarters": "119test01(1191)"},
+                    { "subheadquarters": "119test02(1192)" },
+                    { "subheadquarters": "119test03(1193)" },
+                    { "subheadquarters": "119test04(1194)" }
+                ],
+                "distributor": "",
+                "store": "",
+                "user": "",
+                "7levels": "",
+                "admindepositswithdrawals": "",
+                "personaldepositswithdrawals": "",
+                "subordinatedepositswithdrawals": "",
+                "totaldepositswithdrawals": ""
+            }
+        ],
+        "subheadquarters":"",
+        "distributor": "",
+        "store": "",
+        "user": "",
+        "7levels": "",
+        "admindepositswithdrawals": "2024-10-09 17:00:37",
+        "personaldepositswithdrawals": "test0100",
+        "subordinatedepositswithdrawals": "2024-10-09 17:34:30",
+        "totaldepositswithdrawals": "처리"
     }
 ]

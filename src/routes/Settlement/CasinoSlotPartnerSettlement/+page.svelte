@@ -1,9 +1,14 @@
 <script>
+    
+    import FilterField from '../../../components/part/FilterField.svelte';
+import Title from '../../../components/part/Title.svelte';
+    import Datapicker from '../../../components/part/Datapicker.svelte';
+    import Search from '../../../components/part/Search.svelte';
            import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
     import DataTable from "../../../components/common/DataTable.svelte";
-
+    let fileName = 'CasinoSlotPartnerSettlement';
     const tableColumns = [
         { field:'headheadquarters', label: '왕본사'},
         { field:'mainheadquarters', label: '대본사'},
@@ -20,13 +25,21 @@
         { field:'calculator', label: '계산기', type:'one-button'},
             ]
             onMount(() => {
-        fetchAndSetData();
-    }); 
+        fetchAndSetDataForPage(fileName);
+    });
+    $: tableData = $dataStore.tableData;
 </script>
-{#if $dataStore.tableData.length > 0}
-<DataTable 
-tableData={$dataStore.tableData}
-{tableColumns} title="카지노/슬롯 파트너 정산"/>
-{:else}
-        <p>Loading data...</p>
-    {/if}
+
+<div class="panel panel-inverse px-4 py-4 m-0">
+    <Title title="카지노/슬롯 파트너 정산" showTitle={true} showPerPage={true} />
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex">
+            <FilterField />
+            <Datapicker />
+            <Search />
+        </div>
+    </div>
+    <DataTable
+    {tableData}
+    {tableColumns}/>
+</div>

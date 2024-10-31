@@ -1,4 +1,8 @@
 <script>
+     import FilterField from '../../components/part/FilterField.svelte';
+import Title from '../../components/part/Title.svelte';
+    import Datapicker from '../../components/part/Datapicker.svelte';
+    import Search from '../../components/part/Search.svelte';
     import DailyOverview from '../../components/common/DailyOverview.svelte';
     import { onMount } from 'svelte';
     import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
@@ -26,12 +30,31 @@
     let filterField = "status";
     let filterField2 = "requestcategory";
     onMount(() => {
+        console.log(filterField)
         fetchAndSetDataForPage(fileName);
     });
     $: tableData = $dataStore.tableData;
 </script>
 
 
-<DataTable
-{tableData}
-{tableColumns} showDatePicker={true} {filterField} {filterField2} showButtons={true} title="충전 관리"/>
+<div class="panel panel-inverse px-4 py-4 m-0">
+    <Title title="충전 관리" showTitle={true} showPerPage={true} />
+    <div class="btn-wrapper mt-2">
+        <button class="btn btn-primary">전체</button>
+        <button class="btn btn-danger">요청</button>
+        <button class="btn btn-secondary">대기</button>
+    </div>
+  
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex">
+            <FilterField {filterField} />
+            <Datapicker />
+            <Search />
+        </div>
+        <span>총 금액: 0</span>
+    </div>
+    <DataTable
+    {tableData}
+    {tableColumns}
+    />
+</div>

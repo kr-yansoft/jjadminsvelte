@@ -3,9 +3,9 @@
     import { onMount } from 'svelte';
     import flatpickr from 'flatpickr'; 
     import 'flatpickr/dist/flatpickr.css'; 
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
- 
+    let fileName = 'DailySettlement';
     const tableColumns = [
         { field: 'game', label: '게임' },
         { field: 'totalbet', label: '총 배팅' },
@@ -50,10 +50,10 @@
 
 
 
-    onMount(() => {
-        fetchAndSetData(); 
+  onMount(() => {
+        fetchAndSetDataForPage(fileName);
     });
-
+    $: tableData = $dataStore.tableData;
 
 </script>
 

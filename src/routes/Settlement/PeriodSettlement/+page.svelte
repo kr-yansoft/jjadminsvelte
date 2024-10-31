@@ -1,9 +1,9 @@
 <script>
     import DataTable2 from '../../../components/common/DataTable2.svelte';
     import { onMount } from 'svelte';
-    import { fetchAndSetData } from '../../../lib/stores/dataHelpers';
+    import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
     import { dataStore } from '../../../lib/stores/dataStore';
- 
+    let fileName = 'DailySettlement';
     const tableColumns = [
         { field: 'game', label: '게임' },
         { field: 'totalbet', label: '총 배팅' },
@@ -48,10 +48,10 @@
 
 
 
-    onMount(() => {
-        fetchAndSetData(); 
+  onMount(() => {
+        fetchAndSetDataForPage(fileName);
     });
-
+    $: tableData = $dataStore.tableData;
 
 </script>
 

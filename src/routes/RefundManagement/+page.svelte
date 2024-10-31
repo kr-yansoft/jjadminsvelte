@@ -1,9 +1,15 @@
 <script>
+    import FilterField from '../../components/part/FilterField.svelte';
+import Title from '../../components/part/Title.svelte';
+    import Datapicker from '../../components/part/Datapicker.svelte';
+    import Search from '../../components/part/Search.svelte';
         import { onMount } from 'svelte';
     import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
     import { dataStore } from '../../lib/stores/dataStore';
     import DataTable from "../../components/common/DataTable.svelte";
+    import { t } from '../../i18n/i18n'
     let fileName = 'RefundManagement';
+
     
 
     const tableColumns = [
@@ -22,9 +28,36 @@
         { field:'memonotes', label: '메모', type:"input"},
         { field:'functionfeatures', label: '기능'},
     ]
+    let filterField = "status";
+    let filterField2 = "refundrequestcategory";
     onMount(() => {
         fetchAndSetDataForPage(fileName);
     });
     $: tableData = $dataStore.tableData;
 </script>
-<DataTable {tableData} {tableColumns} title="환전 관리"/>
+
+<div class="panel panel-inverse px-4 py-4 m-0">
+    <Title title="환전 관리" showTitle={true} showPerPage={true} />
+    <div class="btn-wrapper mt-2">
+        <button class="btn btn-primary">전체</button>
+        <button class="btn btn-danger">요청</button>
+        <button class="btn btn-secondary">대기</button>
+    </div>
+  
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex">
+            <FilterField />
+            <Datapicker />
+            <Search />
+        </div>
+        <span>총 금액: 0</span>
+    </div>
+    
+    <DataTable
+        {tableData}
+        {tableColumns}
+        showDatePicker={true}
+     
+    />
+
+</div>

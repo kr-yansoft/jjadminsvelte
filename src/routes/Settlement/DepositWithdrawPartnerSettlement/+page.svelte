@@ -1,6 +1,8 @@
 <script>
-    import Barcode from '../../../components/common/barcode.svelte';
-    import ToggleTable from '../../../components/common/ToggleTable.svelte';
+        import FilterField from '../../../components/part/FilterField.svelte';
+import Title from '../../../components/part/Title.svelte';
+    import Datapicker from '../../../components/part/Datapicker.svelte';
+    import Search from '../../../components/part/Search.svelte';
     import { onMount } from 'svelte';
 import { fetchAndSetDataForPage } from '../../../lib/stores/dataHelpers';
 import { dataStore } from '../../../lib/stores/dataStore';
@@ -35,8 +37,18 @@ const tableColumns = [
     {tableColumns} />
 </div> -->
 
-<DataTable 
-{tableData}
-{tableColumns}
-on:row-toggle={event => toggleRow(event.detail.index)}
- title="입출금 파트너 정산"/>
+<div class="panel panel-inverse px-4 py-4 m-0">
+    <Title title="입출금 파트너 정산" showTitle={true} showPerPage={true} />
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex">
+            <FilterField />
+            <Datapicker />
+            <Search />
+        </div>
+    </div>
+    <DataTable
+    {tableData}
+    {tableColumns}
+    on:row-toggle={event => toggleRow(event.detail.index)}
+     />
+</div>

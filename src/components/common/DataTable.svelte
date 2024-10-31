@@ -19,6 +19,7 @@
     import jQuery from 'jquery'; // Import jQuery
 
     import { setPageTitle } from '$lib/utils';
+    import { writable } from 'svelte/store';
 
 
     export let showPagination = true;
@@ -37,25 +38,24 @@
     export let filterField = "";
     export let filterField2 = "";
     export let dateRange = { start: '', end: '' };
-    export let showOrderControls = true;
+ 
     export let showTitle = true;
     export let subtitle = "Default Title";
     export let showSubTitle = false;
-    export let showOrderableColumns = false;
+
     export let itemsPerPage = 10;
     export let currentPage = 1;
     export let showPerPage = true;
- export let showButtons = false;
- export let showNoticeButtons = false;
+
     let dataTableElement;
     let dataTableInstance;
     let selectedColumn = '';
     let selectedOrder = 'asc';
     let datePickerInstance;
-    let searchQuery = '';
-    let selectedFilters = []; 
-    let isDropdownOpen = false; 
-    let isDropdownOpen2 = false; 
+    export let searchQuery = '';
+    export let selectedFilters = []; 
+   
+    export let isDropdownOpen2 = false; 
 
 
 
@@ -63,15 +63,15 @@
     $: filteredData = tableData.filter(row =>
          selectedFilters.length === 0 || selectedFilters.includes(row[filterField])
      );
-     function handleCheckboxChange(value, event) {
-         if (event.target.checked) {
-             if (!selectedFilters.includes(value)) {
-                 selectedFilters = [...selectedFilters, value]; 
-             }
-         } else {
-             selectedFilters = selectedFilters.filter(v => v !== value);
-         }
-     }
+    //   export function handleCheckboxChange(value, event) {
+    //      if (event.target.checked) {
+    //          if (!selectedFilters.includes(value)) {
+    //              selectedFilters = [...selectedFilters, value]; 
+    //          }
+    //      } else {
+    //          selectedFilters = selectedFilters.filter(v => v !== value);
+    //      }
+    //  }
      onMount(() => {
         const unsubscribe = locale.subscribe(value => {
             setTimeout(() => {
@@ -113,7 +113,7 @@
          }
      }
  
-     async function initializeDataTable(dataToUse = filteredData) {
+     export async function initializeDataTable(dataToUse = filteredData) {
          await tick();
          if (dataTableInstance) {
              dataTableInstance.clear().destroy(); 
@@ -161,25 +161,35 @@
             },
             dom: 't',
             createdRow: (row, rowData) => {
-                console.log('Row Data:', rowData); 
                 const cells = row.querySelectorAll('td');
+                function hasNestedChildren(data) {
+                    if (Array.isArray(data)) {
+                        return data.some(item => Array.isArray(item) && item.length > 0 ||
+                            (typeof item === 'object' && item !== null && 
+                            Object.values(item).some(value => Array.isArray(value) && value.length > 0))
+                        );
+                    }
+                    return false;
+                }
                 cells.forEach((cell, index) => {
                     const column = tableColumns[index];
                     if (column) {
-                       const children = Object.values(rowData).find(value => Array.isArray(value) && value.length > 0);
+                        const cellData = rowData[column.field];
+                        const hasChildren = hasNestedChildren(cellData);
+                        if (hasChildren && !cell.querySelector('.expand-button')) {
+                            const button = createExpandButton(row, rowData, column.field);
+                            if (button) {
+                                cell.appendChild(button);
+                            
+                            }
+                        }
+                        if (typeof cellData === 'string' || typeof cellData === 'number') {
+                            cell.textContent = cellData;
+                        } else {
+                            // cell.textContent = '1';
+                        }
 
-            if (children) {
-                const button = createExpandButton(row, rowData, children);
-                cell.appendChild(button); // Append button only if children exist
-            } else {
-                // Render text content normally for other fields
-                cell.textContent = rowData[column.field] || '';
-            }
-                //        if (column && column.type === 'button-row') {
-                //     const button = createExpandButton(row, rowData);
-                //     cell.appendChild(button);
-                // } 
-            
+           
                             const getFlagImageSrc = (code) =>
                             `https://flagcdn.com/w40/${code}.png`;
 
@@ -403,7 +413,6 @@
 
                             cell.appendChild(buttonElement);
                         }
-                       
                          if (applyRedColor && index > 0 && !isNaN(rowData[column.field])) {
                          cell.innerHTML = formatAmount(cell.innerHTML);
                          cell.style.textAlign = 'right';
@@ -477,8 +486,6 @@
                             const tableNumbers = fieldData.split(', ').map(value => value.trim());
                             let selectedValues = [...tableNumbers];
 
-                            console.log('Field Data:', fieldData); 
-                            console.log('Table Numbers:', tableNumbers); 
 
                             cell.innerHTML = `
                                 <span class="editable-container editable-inline">
@@ -519,10 +526,10 @@
                                 link.textContent = selectedValues.join(', ') || 'No tables selected';
                                 cell.prepend(link); 
 
-                                console.log('Form:', form); 
+                               
 
                                 if (!form || !checkboxContainer || !cancelButton || !link) {
-                                    console.error('Failed to initialize elements properly.');
+                                 
                                     return;
                                 }
 
@@ -535,7 +542,6 @@
                                 
                                 link.addEventListener('click', (event) => {
                                     event.preventDefault();
-                                    console.log('Link clicked'); 
                                     initializeCheckboxes();
                                     form.style.display = 'block';
                                 });
@@ -762,25 +768,25 @@
                              selectElement.addEventListener('change', (e) => handleSelectChange(rowData, e));
                          }
                          if (column.type === 'html') {
-                const htmlContent = rowData[column.field] || ''; 
-                cell.innerHTML = htmlContent;
-            } 
-            if (column.type === 'not-allowed') {
-                const span = document.createElement('span'); 
-                const spanData = rowData[column.field] || ''; 
-                span.textContent = spanData;
-                span.style.border = '1px solid #ced4da'; 
-                span.style.background = '#f5f5f5'
-                span.style.width = '100%';
-                span.style.textAlign = 'center';
-                span.style.borderRadius = "5px"
-                span.style.padding = '3px'; 
-                span.style.cursor = 'not-allowed'; 
-                span.style.display = 'inline-block'; 
-                span.classList.add('not-allowed-span');
-                cell.innerHTML = ''; 
-                cell.appendChild(span);
-            }
+                            const htmlContent = rowData[column.field] || ''; 
+                            cell.innerHTML = htmlContent;
+                        } 
+                        if (column.type === 'not-allowed') {
+                            const span = document.createElement('span'); 
+                            const spanData = rowData[column.field] || ''; 
+                            span.textContent = spanData;
+                            span.style.border = '1px solid #ced4da'; 
+                            span.style.background = '#f5f5f5'
+                            span.style.width = '100%';
+                            span.style.textAlign = 'center';
+                            span.style.borderRadius = "5px"
+                            span.style.padding = '3px'; 
+                            span.style.cursor = 'not-allowed'; 
+                            span.style.display = 'inline-block'; 
+                            span.classList.add('not-allowed-span');
+                            cell.innerHTML = ''; 
+                            cell.appendChild(span);
+                        }
                          if (column.type === 'input') {   
                             cell.style.padding = '0';
                                 cell.style.paddingLeft = '10px';
@@ -880,60 +886,26 @@
             }
         });
     }
-    async function handleRowExpansion(parentRow, children) {
-    console.log('Expanding child rows:', children);
-
-    if (!Array.isArray(children) || children.length === 0) {
-        console.log('No valid children to expand.');
-        return;
-    }
-
-    await tick(); // Ensure the DOM is stable
-
-    const tableBody = parentRow.closest('tbody');
-    if (!tableBody) {
-        console.error('Table body not found. Cannot insert child rows.');
-        return;
-    }
-
-    children.forEach((childData) => {
-        const newRow = document.createElement('tr');
-        newRow.classList.add('child-row'); // Optional styling
-
-        // Populate the new row with child data
-        tableColumns.forEach((column) => {
-            const newCell = document.createElement('td');
-            newCell.textContent = childData[column.field] || '';
-
-            // Add an expand button if the child also has children
-            if (childData.mainheadquarters || childData.subheadquarters) {
-                const button = createExpandButton(newRow, childData);
-                newCell.appendChild(button);
-            }
-
-            newRow.appendChild(newCell);
-        });
-
-        // Insert the new row directly after the parent row
-        tableBody.insertBefore(newRow, parentRow.nextSibling);
-    });
-}
-
-function createExpandButton(row, rowData) {
-    // Combine mainheadquarters and subheadquarters as possible children
-    const children = [...(rowData.mainheadquarters || []), ...(rowData.subheadquarters || [])];
+    function createExpandButton(row, rowData, levelField) {
+    const children = rowData[levelField] || [];
+    if (children.length === 0) return null;
 
     const button = document.createElement('button');
-    button.textContent = `하부 (${children.length}) ▲`;
+    button.classList.add('btn', 'expand-button');
+    button.textContent = `하부 (${children.length}) ▼`;
+ 
+    button.style.color = 'white';
+    button.style.backgroundColor = 'red';
+    button.style.padding = '5px';
+    button.style.position = 'relative';
+    button.style.zIndex = '1';
 
     let expanded = false;
-
     button.onclick = async () => {
         expanded = !expanded;
-        button.textContent = `하부 (${children.length}) ${expanded ? '▼' : '▲'}`;
-
+        button.textContent = `하부 (${children.length}) ${expanded ? '▲' : '▼'}`;
         if (expanded) {
-            await handleRowExpansion(row, children);
+            await handleRowExpansion(row, children, levelField);
         } else {
             collapseChildRows(row);
         }
@@ -943,12 +915,38 @@ function createExpandButton(row, rowData) {
 }
 
 
+async function handleRowExpansion(parentRow, children, levelField) {
+    if (!Array.isArray(children) || children.length === 0) return;
+    await tick();
+    const tableBody = parentRow.closest('tbody');
+    if (!tableBody) return;
+    children.forEach((childData) => {
+        const newRow = document.createElement('tr');
+        newRow.classList.add('child-row');
+        tableColumns.forEach((column) => {
+            const newCell = document.createElement('td');
+            const cellData = childData[column.field];
+            if (Array.isArray(cellData) && cellData.length > 0) {
+                const button = createExpandButton(newRow, childData, column.field);
+                if (button) newCell.appendChild(button);
+            } else if (typeof cellData === 'string' || typeof cellData === 'number') {
+                newCell.textContent = cellData;
+            } else {
+                newCell.textContent = ''; 
+            }
+            newRow.appendChild(newCell);
+        });
+
+        tableBody.insertBefore(newRow, parentRow.nextSibling);
+    });
+}
+
 function collapseChildRows(parentRow) {
     let nextRow = parentRow.nextSibling;
     while (nextRow && nextRow.classList.contains('child-row')) {
         const tempRow = nextRow;
         nextRow = nextRow.nextSibling;
-        tempRow.remove(); // Remove the child row
+        tempRow.remove();
     }
 }
 
@@ -956,8 +954,6 @@ function collapseChildRows(parentRow) {
 
 
 
-
- // WORKING!!! setting current Page
     function setCurrentPage(page) {
          if (page >= 1 && page <= Math.ceil(totalRecords / itemsPerPage)) {
              currentPage = page;
@@ -971,48 +967,37 @@ function collapseChildRows(parentRow) {
          row.selectedValue = event.target.value;
      }
  
-     function applyFilters() {
-         initializeDataTable(); 
-         isDropdownOpen = false; 
-     }
-     function clearFilters() {
-         selectedFilters = [];
-         initializeDataTable(); 
-         isDropdownOpen = false; 
-     }
-     function toggleDropdown() {
-         isDropdownOpen = !isDropdownOpen; 
-     }
-     function toggleDropdown2() {
+    //  export function applyFilters() {
+    //      initializeDataTable(); 
+    //      isDropdownOpen.set(false); 
+    //  }
+    // export  function clearFilters() {
+    //      selectedFilters = [];
+    //      initializeDataTable(); 
+    //      isDropdownOpen.set(false); 
+    //  }
+    //  export function toggleDropdown() {
+    //      isDropdownOpen.update(value => !value); 
+    //  }
+     export function toggleDropdown2() {
          isDropdownOpen2 = !isDropdownOpen2; 
      }
-     function getUniqueColumnValues(columnField) {
-         const uniqueValues = [...new Set(tableData.map(row => row[columnField]))];
-         return uniqueValues.map(value => ({ value, label: $t(value) }));
-     }
+     export function getUniqueColumnValues(columnField, translate) {
+    const uniqueValues = [...new Set(tableData.map(row => row[columnField]))];
+    return uniqueValues.map(value => ({ value, label: translate(value) }));
+}
  //WORKING!!!  Searching input
-     function filterByEmail(query) {
+    export function filterByEmail(query) {
          filteredData = tableData.filter(row => row.email.toLowerCase().includes(query.toLowerCase()));
      }
-     function handleSearchInput(event) {
+      export function handleSearchInput(event) {
          searchQuery = event.target.value;
          filterByEmail(searchQuery); 
          initializeDataTable();
      }
  
- // WORKING!!! show orderableColumns
-    function updateTableOrder() {
-        if (selectedColumn) {
-            const columnIndex = tableColumns.findIndex(col => col.field === selectedColumn);
-            if (columnIndex !== -1 && dataTableInstance) {
-                dataTableInstance.order([columnIndex, selectedOrder]).draw();
-            }
-        }
-    }
-    function handleColumnChange(event) {
-        selectedColumn = event.target.value;
-        updateTableOrder();
-    }
+
+
     function filterDataByDateRange(startDate, endDate) {
     return tableData.filter(row => {
         const rowDate = new Date(row.regdate || row.datetime || row.processeddate); 
@@ -1117,7 +1102,7 @@ function setupDateRangeButtons(instance) {
      }
  
      // WORKING!! showing Items per Page
-     function onItemsPerPageChange(event) {
+      export function onItemsPerPageChange(event) {
          const newSize = parseInt(event.target.value);
          dataStore.update(store => {
              store.itemsPerPage = newSize;
@@ -1158,11 +1143,11 @@ function setupDateRangeButtons(instance) {
  }
  </script>
  {#if $locale}
- <div class="panel panel-inverse px-4 py-4 m-0">
+ <div class="">
     
          <div class="scrollable-panel">
              <div class="d-flex justify-content-between   flex-row flex-wrap" id="table-header">
-                 {#if showTitle}
+                 <!-- {#if showTitle}
                      <div class="d-flex align-items-center justify-content-between w-100">
                          <div class="d-flex align-items-end w-100" id="title">
                              <div class="d-flex align-items-end">
@@ -1185,125 +1170,65 @@ function setupDateRangeButtons(instance) {
                      <div class="d-flex align-items-end" id="title">
                          <h5 class="m-0 me-2">{subtitle}</h5>
                      </div>
-                 {/if}
-                 {#if showOrderControls}
-                 <div class="d-flex mt-2 justify-content-end w-100 flex-wrap">
-                    <div class="d-flex  w-100">
-                        {#if showButtons}
-                        <div class="d-flex w-100 mb-2">
-                            <button type="button" class="btn btn-primary">전체</button>
-                            <button type="button" class="btn btn-danger mx-2">요청</button>
-                            <button type="button" class="btn btn-secondary">대기</button>
+                 {/if} -->
+
+                 <!-- {#if filterField}
+                 <div class="filter-select me-2" >
+                     <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown}>
+                         {$t(tableColumns.find(col => col.field === filterField)?.label || filterField)}
+                         <i class=" fa-solid fa-chevron-down"></i>
+                     </button>
+                     {#if $isDropdownOpen}
+                     <div class="dropdown-content">
+                        {#each getUniqueColumnValues(filterField) as { value, label }, index}
+                        <div class="checkbox-option checkbox-wrapper-13">
+                          <input
+                            type="checkbox"
+                            id={`checkbox-${index}`}
+                            checked={selectedFilters.includes(value)}
+                            class="substituted"
+                            on:change={(e) => handleCheckboxChange(value, e)}
+                          />
+                          <label for={`checkbox-${index}`}>{label}</label>
+                        </div>
+                      {/each}
+                         <div class="btn-wrap text-center my-2">
+                             <button type="button" class="btn btn-primary" on:click={applyFilters}>{$t('button.save')}</button>
+                             <button type="button" class="btn btn-danger" on:click={clearFilters}>{$t('button.clear')}</button>
                          </div>
-                         {/if}
-                         {#if showNoticeButtons}
-                         <div class="d-flex justify-content-between w-100 mb-2">
-                            <div class="d-flex" id="noticebuttons">
-                                <button class="btn">전체</button>
-                                <button class="btn">신규문의</button>
-                                <button class="btn">대기</button>
-                                <button class="btn">답변 완료</button>
-                                <button class="btn">삭제</button>
-                            </div>
-                            <div class="d-flex">
-                                <button class="btn btn-danger me-1">전체 삭제</button>
-                                <button class="btn btn-secondary">템플릿 관리</button>
-                            </div>
-                         </div>
-                         {/if}
-                    </div>
-                     <div class="d-flex justify-content-between w-100 align-items-center">
-                         <div class="d-flex">
-                             <div class="order-controls text-end d-flex">
-                                 {#if showDatePicker}
-                                     <div class="d-flex">
-                                         <input type="text" id="date-picker"  placeholder="{$t('content.datepicker')}" class="form-control  me-2 w-200px" />
-                                     </div>
-                                 {/if}
-                                 {#if filterField}
-                                 <div class="filter-select me-2" >
-                                     <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown}>
-                                         {$t(tableColumns.find(col => col.field === filterField)?.label || filterField)}
-                                         <i class=" fa-solid fa-chevron-down"></i>
-                                     </button>
-                                     {#if isDropdownOpen}
-                                     <div class="dropdown-content">
-                                        {#each getUniqueColumnValues(filterField) as { value, label }, index}
-                                        <div class="checkbox-option checkbox-wrapper-13">
-                                          <input
-                                            type="checkbox"
-                                            id={`checkbox-${index}`}
-                                            checked={selectedFilters.includes(value)}
-                                            class="substituted"
-                                            on:change={(e) => handleCheckboxChange(value, e)}
-                                          />
-                                          <label for={`checkbox-${index}`}>{label}</label>
-                                        </div>
-                                      {/each}
-                                         <div class="btn-wrap text-center my-2">
-                                             <button type="button" class="btn btn-primary" on:click={applyFilters}>{$t('button.save')}</button>
-                                             <button type="button" class="btn btn-danger" on:click={clearFilters}>{$t('button.clear')}</button>
-                                         </div>
-                                     </div>
-                                     {/if}
-                                 </div>
-                                 {/if}
-                                 {#if filterField2}
-                                 <div class="filter-select me-2" >
-                                     <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown2}>
-                                         {$t(tableColumns.find(col => col.field === filterField2)?.label || filterField2)}
-                                         <i class=" fa-solid fa-chevron-down"></i>
-                                     </button>
-                                     {#if isDropdownOpen2}
-                                     <div class="dropdown-content">
-                                        {#each getUniqueColumnValues(filterField2) as { value, label }, index}
-                                        <div class="checkbox-option checkbox-wrapper-13">
-                                          <input
-                                            type="checkbox"
-                                            id={`checkbox-${index}`}
-                                            checked={selectedFilters.includes(value)}
-                                            class="substituted"
-                                            on:change={(e) => handleCheckboxChange(value, e)}
-                                          />
-                                          <label for={`checkbox-${index}`}>{label}</label>
-                                        </div>
-                                      {/each}
-                                         <div class="btn-wrap text-center my-2">
-                                             <button type="button" class="btn btn-primary" on:click={applyFilters}>{$t('button.save')}</button>
-                                             <button type="button" class="btn btn-danger" on:click={clearFilters}>{$t('button.clear')}</button>
-                                         </div>
-                                     </div>
-                                     {/if}
-                                 </div>
-                                 {/if}
-                                 {#if showOrderableColumns}
-                                     <select class="me-2" id="column-select" on:change={handleColumnChange}>
-                                        <option value="" class="first-option">{$t('content.search')}</option>
-                                         {#each orderableColumns as column}
-                                         <option value={column.field}>{$t(column.label)}</option>
-                                         {/each}
-                                     </select>
-                                 {/if}
-             
-                             </div>
-                             <div class="d-flex align-items-center">
-                                 <div class="input-group w-250px">
-                                     <input
-                                         type="text"
-                                         id="custom-search"
-                                         class="form-control "
-                                         placeholder="{$t('content.search')}"
-                                         on:input={handleSearchInput} />
-                                     <button type="button" class="btn btn-indigo" on:click={() => filterByEmail(searchQuery)}>Go!</button>
-                                 </div>
-             
-                             </div>
-                         </div>
-                         <span class="d-block ms-2 w-70px" id='totalamount'>총 금액: <b>0</b></span>
                      </div>
-             
+                     {/if}
+                 </div>
+                 {/if} -->
+                 {#if filterField2}
+                 <div class="filter-select me-2" >
+                     <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown2}>
+                         {$t(tableColumns.find(col => col.field === filterField2)?.label || filterField2)}
+                         <i class=" fa-solid fa-chevron-down"></i>
+                     </button>
+                     {#if isDropdownOpen2}
+                     <div class="dropdown-content">
+                        {#each getUniqueColumnValues(filterField2) as { value, label }, index}
+                        <div class="checkbox-option checkbox-wrapper-13">
+                          <input
+                            type="checkbox"
+                            id={`checkbox-${index}`}
+                            checked={selectedFilters.includes(value)}
+                            class="substituted"
+                            on:change={(e) => handleCheckboxChange(value, e)}
+                          />
+                          <label for={`checkbox-${index}`}>{label}</label>
+                        </div>
+                      {/each}
+                         <div class="btn-wrap text-center my-2">
+                             <button type="button" class="btn btn-primary" on:click={applyFilters}>{$t('button.save')}</button>
+                             <button type="button" class="btn btn-danger" on:click={clearFilters}>{$t('button.clear')}</button>
+                         </div>
+                     </div>
+                     {/if}
                  </div>
                  {/if}
+                
              </div>
              <slot>
                  <!-- Post Notice Part goes here -->
@@ -1402,9 +1327,7 @@ function setupDateRangeButtons(instance) {
  </div>
  {/if}
  <style scoped>
-    .child-row{
-        padding: 0;
-    }
+
     .scrollable-panel{
         overflow-x: auto;
     }
@@ -1414,14 +1337,7 @@ function setupDateRangeButtons(instance) {
             flex-direction:column !important;
         }
     }
-     #title h1 {
-         color: #415e80;
-     }
-     #title span {
-         font-size: 20px;
-         color: #415e80;
-         flex-direction: column;
-     }
+
      select {
          padding: 5px;
          border: 1px solid lightgray;
@@ -1438,6 +1354,7 @@ function setupDateRangeButtons(instance) {
      table th {
          font-size: 13px;
          color: #415e80;
+         background: #dee2e6;
      }
      table tbody{
         text-align: center !important;
