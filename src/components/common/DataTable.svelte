@@ -12,14 +12,11 @@
     import 'flatpickr/dist/flatpickr.css';
     import { Korean } from 'flatpickr/dist/l10n/ko.js';
     import { english } from 'flatpickr/dist/l10n/default.js';
-    import * as XLSX from 'xlsx';
     import { t } from '../../i18n/i18n';
     import { locale } from 'svelte-i18n';
     import { get } from 'svelte/store';
-    import jQuery from 'jquery'; // Import jQuery
-
     import { setPageTitle } from '$lib/utils';
-    import { writable } from 'svelte/store';
+
 
 
     export let showPagination = true;
@@ -30,75 +27,59 @@
     export let order = true;
     export let showDatePicker = false;
     export let firstFixedColumns = 0;
- //    export let lastFixedColumns = 0;
     export let firstColumnAlign = "text-center";
     export let firstColumnColorClass = "column-text-color";
     export let applyRedColor = false;
     export let title = "Default Title";
     export let filterField = "";
-    export let filterField2 = "";
+    // export let filterField2 = "";
     export let dateRange = { start: '', end: '' };
- 
-    export let showTitle = true;
-    export let subtitle = "Default Title";
-    export let showSubTitle = false;
-
     export let itemsPerPage = 10;
     export let currentPage = 1;
-    export let showPerPage = true;
+    export let searchQuery = '';
+    export let selectedFilters = []; 
+    export let isDropdownOpen2 = false; 
 
     let dataTableElement;
     let dataTableInstance;
-    let selectedColumn = '';
-    let selectedOrder = 'asc';
     let datePickerInstance;
-    export let searchQuery = '';
-    export let selectedFilters = []; 
-   
-    export let isDropdownOpen2 = false; 
-
-
-
-
-    $: filteredData = tableData.filter(row =>
-         selectedFilters.length === 0 || selectedFilters.includes(row[filterField])
-     );
-    //   export function handleCheckboxChange(value, event) {
-    //      if (event.target.checked) {
-    //          if (!selectedFilters.includes(value)) {
-    //              selectedFilters = [...selectedFilters, value]; 
-    //          }
-    //      } else {
-    //          selectedFilters = selectedFilters.filter(v => v !== value);
-    //      }
-    //  }
-     onMount(() => {
-        const unsubscribe = locale.subscribe(value => {
-            setTimeout(() => {
-                setupDatePicker(); 
-                setPageTitle(title); 
-
-                if (dataTableElement) {
-                    initializeDataTable(); 
-                }
-            }, 500); 
-        });
-    return () => {
-        unsubscribe();
-        destroyDataTable();
-    };
-});
-
-     onDestroy(() => {
-         destroyDataTable();
-     });
- 
+    export let filteredData = [...tableData];
+    $: console.log("101111111111111 Updated filteredData in DataTable:", filteredData); 
      $: tableData = $dataStore.tableData;
      $: totalRecords = $dataStore.totalRecords;
      $: currentPage = $dataStore.currentPage;
      $: itemsPerPage = $dataStore.itemsPerPage;
      $: totalPages = totalRecords ? Math.ceil(totalRecords / itemsPerPage) : 1;
-     let filteredData = [...tableData];
+     $: filteredData = tableData.filter(row =>
+         selectedFilters.length === 0 || selectedFilters.includes(row[filterField])
+     );
+     $: filteredData && initializeDataTable();
+     
+     
+  
+     onMount(() => {
+            const unsubscribe = locale.subscribe(value => {
+                setTimeout(() => {
+                    setupDatePicker(); 
+                    setPageTitle(title); 
+                    
+
+                    if (dataTableElement) {
+                        initializeDataTable(); 
+                    }
+                }, 500); 
+            });
+        return () => {
+            unsubscribe();
+            destroyDataTable();
+        };
+    });
+
+     onDestroy(() => {
+         destroyDataTable();
+     });
+ 
+ 
  
      function preprocessTableData(row) {
          return tableColumns.reduce((acc, col) => {
@@ -886,72 +867,80 @@
             }
         });
     }
+    //Toggle Button
     function createExpandButton(row, rowData, levelField) {
-    const children = rowData[levelField] || [];
-    if (children.length === 0) return null;
+        const children = rowData[levelField] || [];
+        if (children.length === 0) return null;
 
-    const button = document.createElement('button');
-    button.classList.add('btn', 'expand-button');
-    button.textContent = `하부 (${children.length}) ▼`;
- 
-    button.style.color = 'white';
-    button.style.backgroundColor = 'red';
-    button.style.padding = '5px';
-    button.style.position = 'relative';
-    button.style.zIndex = '1';
+        const button = document.createElement('button');
+        button.classList.add('btn', 'expand-button');
+        button.textContent = `하부 (${children.length}) ▼`;
+    
+        button.style.color = 'white';
+        button.style.backgroundColor = 'red';
+        button.style.padding = '5px';
+        button.style.position = 'relative';
+        button.style.zIndex = '1';
 
-    let expanded = false;
-    button.onclick = async () => {
-        expanded = !expanded;
-        button.textContent = `하부 (${children.length}) ${expanded ? '▲' : '▼'}`;
-        if (expanded) {
-            await handleRowExpansion(row, children, levelField);
-        } else {
-            collapseChildRows(row);
-        }
-    };
-
-    return button;
-}
-
-
-async function handleRowExpansion(parentRow, children, levelField) {
-    if (!Array.isArray(children) || children.length === 0) return;
-    await tick();
-    const tableBody = parentRow.closest('tbody');
-    if (!tableBody) return;
-    children.forEach((childData) => {
-        const newRow = document.createElement('tr');
-        newRow.classList.add('child-row');
-        tableColumns.forEach((column) => {
-            const newCell = document.createElement('td');
-            const cellData = childData[column.field];
-            if (Array.isArray(cellData) && cellData.length > 0) {
-                const button = createExpandButton(newRow, childData, column.field);
-                if (button) newCell.appendChild(button);
-            } else if (typeof cellData === 'string' || typeof cellData === 'number') {
-                newCell.textContent = cellData;
+        let expanded = false;
+        button.onclick = async () => {
+            expanded = !expanded;
+            button.textContent = `하부 (${children.length}) ${expanded ? '▲' : '▼'}`;
+            if (expanded) {
+                await handleRowExpansion(row, children, levelField);
             } else {
-                newCell.textContent = ''; 
+                collapseChildRows(row);
             }
-            newRow.appendChild(newCell);
-        });
+        };
 
-        tableBody.insertBefore(newRow, parentRow.nextSibling);
-    });
-}
-
-function collapseChildRows(parentRow) {
-    let nextRow = parentRow.nextSibling;
-    while (nextRow && nextRow.classList.contains('child-row')) {
-        const tempRow = nextRow;
-        nextRow = nextRow.nextSibling;
-        tempRow.remove();
+        return button;
     }
-}
+    async function handleRowExpansion(parentRow, children, levelField) {
+        if (!Array.isArray(children) || children.length === 0) return;
+        await tick();
+        const tableBody = parentRow.closest('tbody');
+        if (!tableBody) return;
+        children.forEach((childData) => {
+            const newRow = document.createElement('tr');
+            newRow.classList.add('child-row');
+            tableColumns.forEach((column) => {
+                const newCell = document.createElement('td');
+                const cellData = childData[column.field];
+                if (Array.isArray(cellData) && cellData.length > 0) {
+                    const button = createExpandButton(newRow, childData, column.field);
+                    if (button) newCell.appendChild(button);
+                } else if (typeof cellData === 'string' || typeof cellData === 'number') {
+                    newCell.textContent = cellData;
+                } else {
+                    newCell.textContent = ''; 
+                }
+                newRow.appendChild(newCell);
+            });
+
+            tableBody.insertBefore(newRow, parentRow.nextSibling);
+        });
+    }
+
+    function collapseChildRows(parentRow) {
+        let nextRow = parentRow.nextSibling;
+        while (nextRow && nextRow.classList.contains('child-row')) {
+            const tempRow = nextRow;
+            nextRow = nextRow.nextSibling;
+            tempRow.remove();
+        }
+    }
 
 
 
+ //Not WORKING!!!  Searching input
+ function filterByEmail(query) {
+         filteredData = tableData.filter(row => row.member && row.member.toLowerCase().includes(query.toLowerCase()));
+     }
+     function handleSearchInput(event) {
+         searchQuery = event.target.value;
+         filterByEmail(searchQuery); 
+         initializeDataTable();
+     }
 
 
     function setCurrentPage(page) {
@@ -986,16 +975,7 @@ function collapseChildRows(parentRow) {
     const uniqueValues = [...new Set(tableData.map(row => row[columnField]))];
     return uniqueValues.map(value => ({ value, label: translate(value) }));
 }
- //WORKING!!!  Searching input
-    export function filterByEmail(query) {
-         filteredData = tableData.filter(row => row.email.toLowerCase().includes(query.toLowerCase()));
-     }
-      export function handleSearchInput(event) {
-         searchQuery = event.target.value;
-         filterByEmail(searchQuery); 
-         initializeDataTable();
-     }
- 
+
 
 
     function filterDataByDateRange(startDate, endDate) {
@@ -1144,63 +1124,12 @@ function setupDateRangeButtons(instance) {
  </script>
  {#if $locale}
  <div class="">
-    
+  
          <div class="scrollable-panel">
+           
              <div class="d-flex justify-content-between   flex-row flex-wrap" id="table-header">
-                 <!-- {#if showTitle}
-                     <div class="d-flex align-items-center justify-content-between w-100">
-                         <div class="d-flex align-items-end w-100" id="title">
-                             <div class="d-flex align-items-end">
-                                 <h1 class="m-0 me-2">{title}</h1> <span class="d-none d-lg-block">{$t('content.list')}</span>
-                             </div>
-                             {#if showPerPage}
-                             <select on:change={(event) => onItemsPerPageChange(event)} class="ms-4">
-                                 <option value="10" selected={itemsPerPage === 10}>10</option>
-                                 <option value="25" selected={itemsPerPage === 25}>25</option>
-                                 <option value="50" selected={itemsPerPage === 50}>50</option>
-                                 <option value="100" selected={itemsPerPage === 100}>100</option>
-                             </select>
-                             {/if}
-                         </div>
-             
-                     </div>
-                 {/if}
-             
-                 {#if showSubTitle}
-                     <div class="d-flex align-items-end" id="title">
-                         <h5 class="m-0 me-2">{subtitle}</h5>
-                     </div>
-                 {/if} -->
-
-                 <!-- {#if filterField}
-                 <div class="filter-select me-2" >
-                     <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown}>
-                         {$t(tableColumns.find(col => col.field === filterField)?.label || filterField)}
-                         <i class=" fa-solid fa-chevron-down"></i>
-                     </button>
-                     {#if $isDropdownOpen}
-                     <div class="dropdown-content">
-                        {#each getUniqueColumnValues(filterField) as { value, label }, index}
-                        <div class="checkbox-option checkbox-wrapper-13">
-                          <input
-                            type="checkbox"
-                            id={`checkbox-${index}`}
-                            checked={selectedFilters.includes(value)}
-                            class="substituted"
-                            on:change={(e) => handleCheckboxChange(value, e)}
-                          />
-                          <label for={`checkbox-${index}`}>{label}</label>
-                        </div>
-                      {/each}
-                         <div class="btn-wrap text-center my-2">
-                             <button type="button" class="btn btn-primary" on:click={applyFilters}>{$t('button.save')}</button>
-                             <button type="button" class="btn btn-danger" on:click={clearFilters}>{$t('button.clear')}</button>
-                         </div>
-                     </div>
-                     {/if}
-                 </div>
-                 {/if} -->
-                 {#if filterField2}
+                
+                 <!-- {#if filterField2}
                  <div class="filter-select me-2" >
                      <button class="btn btn-select first-option text-nowrap" on:click={toggleDropdown2}>
                          {$t(tableColumns.find(col => col.field === filterField2)?.label || filterField2)}
@@ -1227,14 +1156,14 @@ function setupDateRangeButtons(instance) {
                      </div>
                      {/if}
                  </div>
-                 {/if}
+                 {/if} -->
                 
              </div>
              <slot>
                  <!-- Post Notice Part goes here -->
              </slot>
              
-             <table bind:this={dataTableElement}  tableData={$dataStore.tableData2} class="table mt-3 table-hover table-bordered align-middle text-nowrap" id="dataTable">
+             <table bind:this={dataTableElement} class="table mt-3 table-hover table-bordered align-middle text-nowrap" id="dataTable">
                 <thead>
                      <tr>
                          {#each tableColumns as col}
@@ -1246,9 +1175,7 @@ function setupDateRangeButtons(instance) {
                     {#if tableData?.length > 0}
                         {#each tableData as row}
                             <tr>
-                                
                                 {#each tableColumns as column}
-                                
                                     <td >
                                         {row[column.field] ?? ''}
                                     </td>
@@ -1338,14 +1265,6 @@ function setupDateRangeButtons(instance) {
         }
     }
 
-     select {
-         padding: 5px;
-         border: 1px solid lightgray;
-         border-radius: 5px;
-     }
-     option {
-         padding: 5px;
-     }
      table {
          font-size: 14px;
          border-collapse: collapse;
@@ -1359,57 +1278,11 @@ function setupDateRangeButtons(instance) {
      table tbody{
         text-align: center !important;
      }
-     #totalamount{
-        width: 90px;
-        display: block;
-        font-size: 15px;
-     }
+  
      .text-nowrap {
          white-space: nowrap;
      }
 
-     .first-option{
-        color:gray !important
-     }
-     #noticebuttons{
-        gap: 5px;
-     }
-     #noticebuttons button{
-        border: 1px solid #dee2e6;
-        border-radius: 0;
-     }
-     .dropdown-content {
-         display: block;
-         position: absolute;
-         background-color: #f9f9f9;
-         min-width: 160px;
-         border: 1px solid #ddd;
-         z-index: 1;
-         box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-     }
-     .dropdown-content label{
-        width: 100%;
-        text-align: left;
-        padding-left: 5px;
-     }
- 
-     .checkbox-option {
-         padding: 5px;
-         display: flex;
-         align-items: center;
-     }
- 
-     .checkbox-option input[type="checkbox"] {
-         margin-right: 10px;
-     }
-     .btn-select{
-         border: 1px solid lightgray;
-     }
- 
-     .btn-select i{
-         color:black;
-         font-weight: bold;
-     }
      .pagination-btn {
          padding: 0.5rem 1rem;
          margin: 0 0.2rem;
@@ -1440,97 +1313,5 @@ function setupDateRangeButtons(instance) {
          background-color: lightgray;
          cursor: not-allowed;
      }
-     .checkbox-wrapper-13 input[type=checkbox] {
-      --active: #275EFE;
-      --active-inner: #fff;
-      --focus: 2px rgba(39, 94, 254, .3);
-      --border: #BBC1E1;
-      --border-hover: #275EFE;
-      --background: #fff;
-      --disabled: #F6F8FF;
-      --disabled-inner: #E1E6F9;
-      height: 18px;
-      outline: none;
-      display: inline-block;
-      vertical-align: top;
-      position: relative;
-      margin: 0;
-      cursor: pointer;
-      border: 1px solid var(--bc, var(--border));
-      background: var(--b, var(--background));
-      transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:after {
-      content: "";
-      display: block;
-      left: 0;
-      top: 0;
-      position: absolute;
-      transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:checked {
-      --b: var(--active);
-      --bc: var(--active);
-      --d-o: .3s;
-      --d-t: .6s;
-      --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:disabled {
-      --b: var(--disabled);
-      cursor: not-allowed;
-      opacity: 0.9;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:disabled:checked {
-      --b: var(--disabled-inner);
-      --bc: var(--border);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:disabled + label {
-      cursor: not-allowed;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:hover:not(:checked):not(:disabled) {
-      --bc: var(--border-hover);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:focus {
-      box-shadow: 0 0 0 var(--focus);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
-      width: 21px;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch):after {
-      opacity: var(--o, 0);
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch):checked {
-      --o: 1;
-    }
-    .checkbox-wrapper-13 input[type=checkbox] + label {
-      display: inline-block;
-      vertical-align: middle;
-      cursor: pointer;
-      margin-left: 4px;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
-      border-radius: 3px;
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch):after {
-      width: 5px;
-      height: 9px;
-      border: 2px solid var(--active-inner);
-      border-top: 0;
-      border-left: 0;
-      left: 6px;
-      top: 2px;
-      transform: rotate(var(--r, 20deg));
-    }
-    .checkbox-wrapper-13 input[type=checkbox]:not(.switch):checked {
-      --r: 43deg;
-    }
-    .checkbox-wrapper-13 * {
-        box-sizing: inherit;
-    }
-    .checkbox-wrapper-13 *:before,
-    .checkbox-wrapper-13 *:after {
-        box-sizing: inherit;
-    }
-
 
  </style>

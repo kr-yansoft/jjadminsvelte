@@ -1,13 +1,16 @@
 <script>
     import FilterField from '../../components/part/FilterField.svelte';
-import Title from '../../components/part/Title.svelte';
+    import FilterField2 from '../../components/part/FilterField2.svelte';
+    import Title from '../../components/part/Title.svelte';
     import Datapicker from '../../components/part/Datapicker.svelte';
-    import Search from '../../components/part/Search.svelte';
-        import { onMount } from 'svelte';
+   
+    import { onMount } from 'svelte';
     import { fetchAndSetDataForPage } from '../../lib/stores/dataHelpers';
     import { dataStore } from '../../lib/stores/dataStore';
     import DataTable from "../../components/common/DataTable.svelte";
     import { t } from '../../i18n/i18n'
+    import { locale } from 'svelte-i18n';
+    
     let fileName = 'RefundManagement';
 
     
@@ -29,13 +32,14 @@ import Title from '../../components/part/Title.svelte';
         { field:'functionfeatures', label: '기능'},
     ]
     let filterField = "status";
-    let filterField2 = "refundrequestcategory";
+    let filterField2 = "member";
     onMount(() => {
         fetchAndSetDataForPage(fileName);
     });
     $: tableData = $dataStore.tableData;
 </script>
 
+{#if $locale}
 <div class="panel panel-inverse px-4 py-4 m-0">
     <Title title="환전 관리" showTitle={true} showPerPage={true} />
     <div class="btn-wrapper mt-2">
@@ -46,9 +50,10 @@ import Title from '../../components/part/Title.svelte';
   
     <div class="d-flex justify-content-between align-items-center mt-2">
         <div class="d-flex">
-            <FilterField />
+           
             <Datapicker />
-            <Search />
+            <FilterField {filterField} {tableData} />
+            <FilterField2 {filterField2} {tableData} />
         </div>
         <span>총 금액: 0</span>
     </div>
@@ -61,3 +66,4 @@ import Title from '../../components/part/Title.svelte';
     />
 
 </div>
+{/if}
